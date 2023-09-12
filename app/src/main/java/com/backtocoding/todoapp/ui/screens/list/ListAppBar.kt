@@ -42,20 +42,42 @@ import com.backtocoding.todoapp.ui.theme.TOP_APP_BAR_HEIGHT
 import com.backtocoding.todoapp.ui.theme.Typography
 import com.backtocoding.todoapp.ui.theme.topAppBarBackgroundColor
 import com.backtocoding.todoapp.ui.theme.topAppBarContentColor
+import com.backtocoding.todoapp.ui.viewmodels.SharedViewModel
+import com.backtocoding.todoapp.util.SearchAppBarState
+import com.backtocoding.todoapp.util.TrailingIconState
 
 @Composable
-fun ListAppBar() {
-//    DefaultListAppBar(
-//        onSearchClicked = {},
-//        onSortClicked = {},
-//        onDeleteClicked = {}
-//    )
-    SearchAppBar(
-        text = "",
-        onTextChange = {},
-        onCloseClicked = {},
-        onSearchClicked = {}
-    )
+fun ListAppBar(
+    sharedViewModel: SharedViewModel,
+    searchAppBarState: SearchAppBarState,
+    searchTextState: String
+) {
+    when (searchAppBarState) {
+        SearchAppBarState.CLOSED -> {
+            DefaultListAppBar(
+                onSearchClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
+                },
+                onSortClicked = {},
+                onDeleteClicked = {}
+            )
+        }
+
+        else -> {
+            SearchAppBar(
+                text = searchTextState,
+                onTextChange = { newText ->
+                    sharedViewModel.searchTextState.value = newText
+                },
+                onCloseClicked = {
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.CLOSED
+                    sharedViewModel.searchTextState.value = ""
+                },
+                onSearchClicked = {}
+            )
+        }
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -190,6 +212,10 @@ fun SearchAppBar(
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit
 ) {
+    var trailingIconState by remember {
+        mutableStateOf(TrailingIconState.READY_TO_DELETE)
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -227,6 +253,21 @@ fun SearchAppBar(
             },
             trailingIcon = {
                 IconButton(onClick = {
+                    when (trailingIconState) {
+                        TrailingIconState.READY_TO_DELETE -> {
+                            onTextChange("")
+                            trailingIconState = TrailingIconState.READY_TO_CLOSE
+                        }
+
+                        TrailingIconState.READY_TO_CLOSE -> {
+                            if (text.isNotEmpty()) {
+                                onTextChange("")
+                            } else {
+                                onCloseClicked()
+                                trailingIconState = TrailingIconState.READY_TO_DELETE
+                            }
+                        }
+                    }
                     onCloseClicked()
                 }) {
                     Icon(
@@ -248,8 +289,7 @@ fun SearchAppBar(
                 cursorColor = MaterialTheme.colorScheme.topAppBarContentColor,
                 focusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                containerColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent
             )
         )
     }
