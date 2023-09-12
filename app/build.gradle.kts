@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.backtocoding.todoapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.backtocoding.todoapp"
