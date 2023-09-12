@@ -40,4 +40,4 @@ val ColorScheme.taskItemBackgroundColor: Color
 
 val ColorScheme.taskItemTextColor: Color
     @Composable
-    get() = if (isSystemInDarkTheme()) LightGray else DarkGray
+    get() = if (isSystemInDarkTheme()) Color.White else DarkGray
