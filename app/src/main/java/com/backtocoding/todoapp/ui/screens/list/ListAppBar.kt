@@ -90,7 +90,7 @@ fun DefaultListAppBar(
     TopAppBar(
         title = {
             Text(
-                text = "Tasks",
+                text = stringResource(R.string.list_screen_title),
                 color = MaterialTheme.colorScheme.topAppBarContentColor
             )
         },
@@ -231,7 +231,7 @@ fun SearchAppBar(
             placeholder = {
                 Text(
                     modifier = Modifier.alpha(1.0f),
-                    text = "Search",
+                    text = stringResource(R.string.search_placeholder),
                     color = Color.White
                 )
             },
@@ -246,7 +246,7 @@ fun SearchAppBar(
                     onClick = { }) {
                     Icon(
                         imageVector = Icons.Filled.Search,
-                        contentDescription = "Search Icon",
+                        contentDescription = stringResource(R.string.search_icon),
                         tint = MaterialTheme.colorScheme.topAppBarContentColor
                     )
                 }
@@ -272,7 +272,7 @@ fun SearchAppBar(
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Close,
-                        contentDescription = "Close Icon",
+                        contentDescription = stringResource(R.string.close_icon),
                         tint = MaterialTheme.colorScheme.topAppBarContentColor
                     )
                 }
