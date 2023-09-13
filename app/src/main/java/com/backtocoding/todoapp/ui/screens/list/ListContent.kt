@@ -3,6 +3,7 @@ package com.backtocoding.todoapp.ui.screens.list
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,6 +32,7 @@ import com.backtocoding.todoapp.util.RequestState
 
 @Composable
 fun ListContent(
+    paddingValues: PaddingValues,
     tasks: RequestState<List<ToDoTask>>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
@@ -38,17 +40,22 @@ fun ListContent(
         if (tasks.data.isEmpty()) {
             EmptyContent()
         } else {
-            DisplayTasks(tasks = tasks.data, navigateToTaskScreen = navigateToTaskScreen)
+            DisplayTasks(
+                paddingValues = paddingValues,
+                tasks = tasks.data,
+                navigateToTaskScreen = navigateToTaskScreen
+            )
         }
     }
 }
 
 @Composable
 fun DisplayTasks(
+    paddingValues: PaddingValues,
     tasks: List<ToDoTask>,
     navigateToTaskScreen: (taskId: Int) -> Unit
 ) {
-    LazyColumn {
+    LazyColumn(modifier = Modifier.padding(top = paddingValues.calculateTopPadding())) {
         items(
             items = tasks,
             key = { task ->

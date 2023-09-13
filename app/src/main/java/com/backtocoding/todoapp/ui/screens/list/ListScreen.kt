@@ -45,6 +45,7 @@ fun ListScreen(
         },
         content = {
             ListContent(
+                paddingValues = it,
                 tasks = allTasks,
                 navigateToTaskScreen = navigateToTaskScreen
             )
